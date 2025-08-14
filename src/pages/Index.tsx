@@ -4,6 +4,7 @@ import { SalesChart } from "@/components/SalesChart";
 import { TopProducts } from "@/components/TopProducts";
 import { AlertsPanel } from "@/components/AlertsPanel";
 import { AdsAnalysis } from "@/components/AdsAnalysis";
+import MLIntegration from "@/components/MLIntegration";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   DollarSign, 
@@ -11,7 +12,8 @@ import {
   TrendingUp, 
   Package,
   Users,
-  Eye
+  Eye,
+  Settings
 } from "lucide-react";
 
 const Index = () => {
@@ -54,7 +56,7 @@ const Index = () => {
 
         {/* Tabs Principais */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full lg:w-auto grid-cols-4">
+          <TabsList className="grid w-full lg:w-auto grid-cols-5">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
               Visão Geral
@@ -70,6 +72,10 @@ const Index = () => {
             <TabsTrigger value="alerts" className="flex items-center gap-2">
               <Eye className="h-4 w-4" />
               Alertas
+            </TabsTrigger>
+            <TabsTrigger value="integration" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Integração
             </TabsTrigger>
           </TabsList>
 
@@ -108,6 +114,10 @@ const Index = () => {
 
           <TabsContent value="alerts" className="space-y-6">
             <AlertsPanel />
+          </TabsContent>
+
+          <TabsContent value="integration" className="space-y-6">
+            <MLIntegration />
           </TabsContent>
         </Tabs>
       </main>
