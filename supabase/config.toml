@@ -1,1 +1,4 @@
 project_id = "pwkczhxdgivypgoxpbjz"
+
+[functions.ml-auth]
+verify_jwt = true
