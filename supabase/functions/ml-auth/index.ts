@@ -57,7 +57,7 @@ serve(async (req) => {
         client_id: clientId,
         client_secret: clientSecret,
         code: code,
-        redirect_uri: 'https://pwkczhxdgivypgoxpbjz.supabase.co/functions/v1/ml-callback'
+        redirect_uri: 'https://pwkczhxdgivypgoxpbjz--vite.web.val.run/ml-callback'
       }),
     });
 
