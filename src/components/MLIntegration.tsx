@@ -45,12 +45,12 @@ export default function MLIntegration() {
   };
 
   const handleConnectML = () => {
-    // URL de autorização do Mercado Livre (você precisará configurar no ML Developers)
-    const clientId = 'SEU_CLIENT_ID_AQUI'; // Substituir pelo client ID real
+    // URL de autorização do Mercado Livre
+    const clientId = '8738187321820958'; // Seu Client ID do ML
     const redirectUri = encodeURIComponent(`${window.location.origin}/ml-callback`);
     const state = Math.random().toString(36).substring(7); // Estado para segurança
     
-    const authUrl = `https://auth.mercadolibre.com.br/authorization?` +
+    const authUrl = `https://auth.mercadolivre.com.br/authorization?` +
       `response_type=code&` +
       `client_id=${clientId}&` +
       `redirect_uri=${redirectUri}&` +
