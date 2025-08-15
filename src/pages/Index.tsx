@@ -5,7 +5,9 @@ import { TopProducts } from "@/components/TopProducts";
 import { EnhancedMetrics } from "@/components/EnhancedMetrics";
 import { CompetitiveInsights } from "@/components/CompetitiveInsights";
 import { TopClickedProducts } from "@/components/TopClickedProducts";
+import { TimeRangeSelector, TimeRange } from "@/components/TimeRangeSelector";
 import { AppLayout } from "@/components/AppLayout";
+import { useState } from "react";
 import { 
   DollarSign, 
   ShoppingCart, 
@@ -14,14 +16,28 @@ import {
 } from "lucide-react";
 
 const Index = () => {
+  const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>();
+
+  const handleTimeRangeChange = (range: TimeRange) => {
+    setSelectedTimeRange(range);
+    console.log('Período selecionado:', range);
+    // Aqui você pode implementar a lógica para filtrar os dados baseado no período
+  };
   return (
     <AppLayout>
-      <Header 
-        title="Dashboard" 
-        subtitle="Visão geral das suas vendas e performance no Mercado Livre" 
-      />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-6 pb-4">
+        <Header 
+          title="Dashboard" 
+          subtitle="Visão geral das suas vendas e performance no Mercado Livre" 
+        />
+        <TimeRangeSelector 
+          value={selectedTimeRange}
+          onChange={handleTimeRangeChange}
+          className="sm:ml-auto"
+        />
+      </div>
       
-      <div className="p-6 space-y-8">
+      <div className="px-6 pb-6 space-y-8">
         {/* Métricas Principais */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <MetricCard
