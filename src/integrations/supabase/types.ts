@@ -14,6 +14,95 @@ export type Database = {
   }
   public: {
     Tables: {
+      competitive_monitoring: {
+        Row: {
+          ai_suggestions: string | null
+          analysis_data: Json | null
+          created_at: string
+          id: string
+          ml_listing_id: string
+          product_title: string
+          updated_at: string
+          user_delivery_days: number | null
+          user_id: string
+          user_price: number
+          user_shipping_free: boolean | null
+          user_sold_quantity: number | null
+        }
+        Insert: {
+          ai_suggestions?: string | null
+          analysis_data?: Json | null
+          created_at?: string
+          id?: string
+          ml_listing_id: string
+          product_title: string
+          updated_at?: string
+          user_delivery_days?: number | null
+          user_id: string
+          user_price: number
+          user_shipping_free?: boolean | null
+          user_sold_quantity?: number | null
+        }
+        Update: {
+          ai_suggestions?: string | null
+          analysis_data?: Json | null
+          created_at?: string
+          id?: string
+          ml_listing_id?: string
+          product_title?: string
+          updated_at?: string
+          user_delivery_days?: number | null
+          user_id?: string
+          user_price?: number
+          user_shipping_free?: boolean | null
+          user_sold_quantity?: number | null
+        }
+        Relationships: []
+      }
+      competitor_data: {
+        Row: {
+          competitor_delivery_days: number | null
+          competitor_price: number
+          competitor_reputation_level: string | null
+          competitor_shipping_free: boolean | null
+          competitor_sold_quantity: number | null
+          competitor_title: string
+          created_at: string
+          id: string
+          monitoring_id: string
+        }
+        Insert: {
+          competitor_delivery_days?: number | null
+          competitor_price: number
+          competitor_reputation_level?: string | null
+          competitor_shipping_free?: boolean | null
+          competitor_sold_quantity?: number | null
+          competitor_title: string
+          created_at?: string
+          id?: string
+          monitoring_id: string
+        }
+        Update: {
+          competitor_delivery_days?: number | null
+          competitor_price?: number
+          competitor_reputation_level?: string | null
+          competitor_shipping_free?: boolean | null
+          competitor_sold_quantity?: number | null
+          competitor_title?: string
+          created_at?: string
+          id?: string
+          monitoring_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "competitor_data_monitoring_id_fkey"
+            columns: ["monitoring_id"]
+            isOneToOne: false
+            referencedRelation: "competitive_monitoring"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string

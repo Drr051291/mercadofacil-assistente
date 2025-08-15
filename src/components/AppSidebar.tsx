@@ -37,7 +37,8 @@ const navigationItems = [
   { title: "Vendas", url: "/vendas", icon: BarChart3 },
   { title: "Mercado Ads", url: "/ads", icon: DollarSign },
   { title: "Produtos", url: "/produtos", icon: Package },
-  { title: "Análises", url: "/analises", icon: Target },
+  { title: "Monitor de Concorrência", url: "/monitor-concorrencia", icon: Target },
+  { title: "Análises", url: "/analises", icon: BarChart3 },
   { title: "Alertas", url: "/alertas", icon: Eye },
   { title: "Equipe", url: "/equipe", icon: Users },
 ];

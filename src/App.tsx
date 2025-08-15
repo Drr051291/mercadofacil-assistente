@@ -18,6 +18,7 @@ import Analises from "./pages/Analises";
 import Alertas from "./pages/Alertas";
 import Equipe from "./pages/Equipe";
 import MinhaConta from "./pages/MinhaConta";
+import MonitorConcorrencia from "./pages/MonitorConcorrencia";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -69,6 +70,7 @@ const App = () => {
             <Route path="/vendas" element={user ? <Vendas /> : <Auth />} />
             <Route path="/ads" element={user ? <MercadoAds /> : <Auth />} />
             <Route path="/produtos" element={user ? <Produtos /> : <Auth />} />
+            <Route path="/monitor-concorrencia" element={user ? <MonitorConcorrencia /> : <Auth />} />
             <Route path="/analises" element={user ? <Analises /> : <Auth />} />
             <Route path="/alertas" element={user ? <Alertas /> : <Auth />} />
             <Route path="/equipe" element={user ? <Equipe /> : <Auth />} />
