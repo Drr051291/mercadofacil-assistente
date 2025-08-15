@@ -39,6 +39,7 @@ const navigationItems = [
   { title: "Produtos", url: "/produtos", icon: Package },
   { title: "Análises", url: "/analises", icon: Target },
   { title: "Alertas", url: "/alertas", icon: Eye },
+  { title: "Equipe", url: "/equipe", icon: Users },
 ];
 
 const configItems = [
