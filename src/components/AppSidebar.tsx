@@ -44,6 +44,7 @@ const navigationItems = [
 
 const configItems = [
   { title: "Integração ML", url: "/integracao", icon: Settings },
+  { title: "Minha Conta", url: "/minha-conta", icon: Settings },
 ];
 
 interface Profile {
