@@ -103,11 +103,42 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          message: string
+          read: boolean
+          send_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          message: string
+          read?: boolean
+          send_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          message?: string
+          read?: boolean
+          send_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
           email: string | null
           id: string
+          is_admin: boolean
           ml_access_token: string | null
           ml_nickname: string | null
           ml_user_id: string | null
@@ -119,6 +150,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
+          is_admin?: boolean
           ml_access_token?: string | null
           ml_nickname?: string | null
           ml_user_id?: string | null
@@ -130,6 +162,7 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
+          is_admin?: boolean
           ml_access_token?: string | null
           ml_nickname?: string | null
           ml_user_id?: string | null

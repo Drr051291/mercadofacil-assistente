@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Bell, Settings } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { NotificationBell } from "./NotificationBell";
 
 interface HeaderProps {
   title?: string;
@@ -29,10 +30,7 @@ export const Header = ({ title, subtitle }: HeaderProps) => {
           </div>
           
           <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 h-3 w-3 bg-primary rounded-full"></span>
-            </Button>
+            <NotificationBell />
             <Button variant="ghost" size="icon">
               <Settings className="h-5 w-5" />
             </Button>

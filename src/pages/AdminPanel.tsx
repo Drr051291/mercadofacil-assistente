@@ -6,8 +6,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { Users, Activity, AlertTriangle, TrendingUp } from 'lucide-react';
+import { AdminNotifications } from '@/components/AdminNotifications';
 
 interface AdminProfile {
   id: string;
@@ -142,129 +144,142 @@ export default function AdminPanel() {
       </div>
 
       <main className="container mx-auto px-6 py-8">
-        {/* Métricas Gerais */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total de Usuários</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{profiles.length}</div>
-            </CardContent>
-          </Card>
+        <Tabs defaultValue="users" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="users">Usuários</TabsTrigger>
+            <TabsTrigger value="notifications">Notificações</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="users" className="space-y-6">
+            {/* Métricas Gerais */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Total de Usuários</CardTitle>
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{profiles.length}</div>
+                </CardContent>
+              </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Sellers Conectados</CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-600">{connectedSellers.length}</div>
-            </CardContent>
-          </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Sellers Conectados</CardTitle>
+                  <Activity className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-green-600">{connectedSellers.length}</div>
+                </CardContent>
+              </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tokens Expirados</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-red-600">{expiredTokens.length}</div>
-            </CardContent>
-          </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Tokens Expirados</CardTitle>
+                  <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-red-600">{expiredTokens.length}</div>
+                </CardContent>
+              </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Taxa de Conexão</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {profiles.length > 0 ? Math.round((connectedSellers.length / profiles.length) * 100) : 0}%
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Tabela de Sellers */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Lista de Sellers</CardTitle>
-            <CardDescription>
-              {profiles.length === 0 
-                ? "Nenhum seller conectado ainda. Hora de começar a validação do MVP!"
-                : `${profiles.length} usuários cadastrados na plataforma`
-              }
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="text-center py-8">Carregando dados...</div>
-            ) : profiles.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                Nenhum seller conectado ainda. Hora de começar a validação do MVP!
-              </div>
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Nome</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>ML User ID</TableHead>
-                    <TableHead>ML Nickname</TableHead>
-                    <TableHead>Status Token</TableHead>
-                    <TableHead>Criado em</TableHead>
-                    <TableHead>Última atualização</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {profiles.map((profile) => (
-                    <TableRow key={profile.id}>
-                      <TableCell className="font-medium">
-                        {profile.name || 'Não informado'}
-                      </TableCell>
-                      <TableCell>{profile.email || 'Não informado'}</TableCell>
-                      <TableCell>{profile.ml_user_id || '-'}</TableCell>
-                      <TableCell>{profile.ml_nickname || '-'}</TableCell>
-                      <TableCell>{getTokenStatus(profile.ml_access_token)}</TableCell>
-                      <TableCell>{formatDate(profile.created_at)}</TableCell>
-                      <TableCell>{formatDate(profile.updated_at)}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Alertas e Insights */}
-        {expiredTokens.length > 0 && (
-          <Card className="mt-6 border-red-200">
-            <CardHeader>
-              <CardTitle className="text-red-600 flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5" />
-                Sellers com Token Expirado
-              </CardTitle>
-              <CardDescription>
-                Estes sellers precisam reconectar suas contas do Mercado Livre
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {expiredTokens.map((profile) => (
-                  <div key={profile.id} className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
-                    <div>
-                      <div className="font-medium">{profile.name || profile.email}</div>
-                      <div className="text-sm text-muted-foreground">ML ID: {profile.ml_user_id}</div>
-                    </div>
-                    <Badge variant="destructive">Token Expirado</Badge>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Taxa de Conexão</CardTitle>
+                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {profiles.length > 0 ? Math.round((connectedSellers.length / profiles.length) * 100) : 0}%
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Tabela de Sellers */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Lista de Sellers</CardTitle>
+                <CardDescription>
+                  {profiles.length === 0 
+                    ? "Nenhum seller conectado ainda. Hora de começar a validação do MVP!"
+                    : `${profiles.length} usuários cadastrados na plataforma`
+                  }
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="text-center py-8">Carregando dados...</div>
+                ) : profiles.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    Nenhum seller conectado ainda. Hora de começar a validação do MVP!
+                  </div>
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Nome</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>ML User ID</TableHead>
+                        <TableHead>ML Nickname</TableHead>
+                        <TableHead>Status Token</TableHead>
+                        <TableHead>Criado em</TableHead>
+                        <TableHead>Última atualização</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {profiles.map((profile) => (
+                        <TableRow key={profile.id}>
+                          <TableCell className="font-medium">
+                            {profile.name || 'Não informado'}
+                          </TableCell>
+                          <TableCell>{profile.email || 'Não informado'}</TableCell>
+                          <TableCell>{profile.ml_user_id || '-'}</TableCell>
+                          <TableCell>{profile.ml_nickname || '-'}</TableCell>
+                          <TableCell>{getTokenStatus(profile.ml_access_token)}</TableCell>
+                          <TableCell>{formatDate(profile.created_at)}</TableCell>
+                          <TableCell>{formatDate(profile.updated_at)}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Alertas e Insights */}
+            {expiredTokens.length > 0 && (
+              <Card className="border-red-200">
+                <CardHeader>
+                  <CardTitle className="text-red-600 flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5" />
+                    Sellers com Token Expirado
+                  </CardTitle>
+                  <CardDescription>
+                    Estes sellers precisam reconectar suas contas do Mercado Livre
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    {expiredTokens.map((profile) => (
+                      <div key={profile.id} className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                        <div>
+                          <div className="font-medium">{profile.name || profile.email}</div>
+                          <div className="text-sm text-muted-foreground">ML ID: {profile.ml_user_id}</div>
+                        </div>
+                        <Badge variant="destructive">Token Expirado</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="notifications">
+            <AdminNotifications />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
