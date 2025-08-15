@@ -37,7 +37,7 @@ export function AdminNotifications() {
       .eq('user_id', user.id)
       .single();
 
-    setIsAdmin(['admin', 'super_admin'].includes(profile?.role || ''));
+    setIsAdmin(['admin', 'super_admin'].includes(profile?.role || 'user'));
   };
 
   const fetchUsers = async () => {

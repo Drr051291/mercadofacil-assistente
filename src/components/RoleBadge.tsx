@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Badge } from '@/components/ui/badge';
-import { Crown, Shield, User } from 'lucide-react';
+import { Crown, Shield, Users } from 'lucide-react';
 
-interface RoleBadgeProps {
-  className?: string;
+interface UserRole {
+  role: 'user' | 'admin' | 'super_admin';
 }
 
-export function RoleBadge({ className }: RoleBadgeProps) {
-  const [role, setRole] = useState<string | null>(null);
+export function RoleBadge() {
+  const [userRole, setUserRole] = useState<UserRole['role'] | null>(null);
 
   useEffect(() => {
-    getCurrentUserRole();
+    fetchUserRole();
   }, []);
 
-  const getCurrentUserRole = async () => {
+  const fetchUserRole = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
@@ -24,36 +24,40 @@ export function RoleBadge({ className }: RoleBadgeProps) {
       .eq('user_id', user.id)
       .single();
 
-    setRole(profile?.role || 'user');
+    setUserRole(profile?.role || 'user');
   };
 
+  if (!userRole) return null;
+
   const getRoleBadge = () => {
-    switch (role) {
+    switch (userRole) {
       case 'super_admin':
         return (
-          <Badge variant="destructive" className={`flex items-center gap-1 ${className}`}>
-            <Crown className="h-3 w-3" />
+          <Badge variant="default" className="bg-gradient-primary text-white">
+            <Crown className="h-3 w-3 mr-1" />
             Super Admin
           </Badge>
         );
       case 'admin':
         return (
-          <Badge variant="secondary" className={`flex items-center gap-1 ${className}`}>
-            <Shield className="h-3 w-3" />
+          <Badge variant="secondary" className="bg-accent text-accent-foreground">
+            <Shield className="h-3 w-3 mr-1" />
             Admin
           </Badge>
         );
       default:
         return (
-          <Badge variant="outline" className={`flex items-center gap-1 ${className}`}>
-            <User className="h-3 w-3" />
+          <Badge variant="outline">
+            <Users className="h-3 w-3 mr-1" />
             Usuário
           </Badge>
         );
     }
   };
 
-  if (!role) return null;
-
-  return getRoleBadge();
+  return (
+    <div className="flex items-center gap-2">
+      {getRoleBadge()}
+    </div>
+  );
 }

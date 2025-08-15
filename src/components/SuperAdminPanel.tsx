@@ -7,41 +7,45 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { toast } from '@/hooks/use-toast';
-import { Shield, UserPlus, Crown, Settings, AlertTriangle } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { toast } from '@/hooks/use-toast';
+import { Crown, UserPlus, Shield, Users, History } from 'lucide-react';
 
 interface User {
   id: string;
   user_id: string;
-  email: string;
-  name?: string;
+  name: string | null;
+  email: string | null;
   role: 'user' | 'admin' | 'super_admin';
   created_at: string;
 }
 
-interface AuditLogEntry {
+interface AuditLog {
   id: string;
   user_id: string;
-  old_role: string;
+  old_role: string | null;
   new_role: string;
   changed_by: string;
   changed_at: string;
-  reason?: string;
+  reason: string | null;
   user_email?: string;
   changed_by_email?: string;
 }
 
 export function SuperAdminPanel() {
   const [users, setUsers] = useState<User[]>([]);
-  const [auditLog, setAuditLog] = useState<AuditLogEntry[]>([]);
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(false);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserName, setNewUserName] = useState('');
+  const [newUserRole, setNewUserRole] = useState<'user' | 'admin' | 'super_admin'>('user');
   const [showAddUser, setShowAddUser] = useState(false);
-  const [newUser, setNewUser] = useState({ name: '', email: '', role: 'user' as const });
 
   useEffect(() => {
     checkSuperAdminStatus();
+    fetchUsers();
+    fetchAuditLogs();
   }, []);
 
   const checkSuperAdminStatus = async () => {
@@ -54,13 +58,7 @@ export function SuperAdminPanel() {
       .eq('user_id', user.id)
       .single();
 
-    const isSuper = profile?.role === 'super_admin';
-    setIsSuperAdmin(isSuper);
-    
-    if (isSuper) {
-      fetchUsers();
-      fetchAuditLog();
-    }
+    setIsSuperAdmin(profile?.role === 'super_admin');
   };
 
   const fetchUsers = async () => {
@@ -73,11 +71,10 @@ export function SuperAdminPanel() {
 
       if (error) throw error;
       setUsers(data || []);
-    } catch (error) {
-      console.error('Error fetching users:', error);
+    } catch (error: any) {
       toast({
         title: "Erro",
-        description: "Erro ao carregar usuários",
+        description: error.message,
         variant: "destructive"
       });
     } finally {
@@ -85,26 +82,22 @@ export function SuperAdminPanel() {
     }
   };
 
-  const fetchAuditLog = async () => {
+  const fetchAuditLogs = async () => {
     try {
       const { data, error } = await supabase
         .from('role_audit_log')
-        .select(`
-          *,
-          profiles!role_audit_log_user_id_fkey(email),
-          profiles!role_audit_log_changed_by_fkey(email)
-        `)
+        .select('*')
         .order('changed_at', { ascending: false })
         .limit(50);
 
       if (error) throw error;
-      setAuditLog(data || []);
-    } catch (error) {
-      console.error('Error fetching audit log:', error);
+      setAuditLogs(data || []);
+    } catch (error: any) {
+      console.error('Error fetching audit logs:', error);
     }
   };
 
-  const updateUserRole = async (userId: string, newRole: 'user' | 'admin' | 'super_admin') => {
+  const changeUserRole = async (userId: string, newRole: 'user' | 'admin' | 'super_admin') => {
     try {
       const { error } = await supabase
         .from('profiles')
@@ -115,64 +108,47 @@ export function SuperAdminPanel() {
 
       toast({
         title: "Sucesso",
-        description: "Função do usuário atualizada com sucesso"
+        description: `Função do usuário alterada para ${newRole}`
       });
 
       fetchUsers();
-      fetchAuditLog();
+      fetchAuditLogs();
     } catch (error: any) {
       toast({
         title: "Erro",
-        description: error.message || "Erro ao atualizar função do usuário",
+        description: error.message,
         variant: "destructive"
       });
     }
   };
 
   const addNewUser = async () => {
-    if (!newUser.email || !newUser.name) {
+    if (!newUserEmail || !newUserName) {
       toast({
         title: "Erro",
-        description: "Nome e email são obrigatórios",
+        description: "Preencha todos os campos",
         variant: "destructive"
       });
       return;
     }
 
     try {
-      // Create auth user first
-      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-        email: newUser.email,
-        password: 'tempPassword123!', // Temporary password
-        email_confirm: true
-      });
-
-      if (authError) throw authError;
-
-      // Create profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          user_id: authData.user.id,
-          email: newUser.email,
-          name: newUser.name,
-          role: newUser.role
-        });
-
-      if (profileError) throw profileError;
-
+      // In a real implementation, you would create the user through Supabase Auth
+      // For now, we'll just show a message
       toast({
-        title: "Sucesso",
-        description: "Usuário criado com sucesso"
+        title: "Funcionalidade em desenvolvimento",
+        description: "A criação de novos usuários será implementada em breve",
+        variant: "default"
       });
 
-      setNewUser({ name: '', email: '', role: 'user' });
       setShowAddUser(false);
-      fetchUsers();
+      setNewUserEmail('');
+      setNewUserName('');
+      setNewUserRole('user');
     } catch (error: any) {
       toast({
         title: "Erro",
-        description: error.message || "Erro ao criar usuário",
+        description: error.message,
         variant: "destructive"
       });
     }
@@ -181,20 +157,25 @@ export function SuperAdminPanel() {
   const getRoleBadge = (role: string) => {
     switch (role) {
       case 'super_admin':
-        return <Badge variant="destructive" className="flex items-center gap-1"><Crown className="h-3 w-3" />Super Admin</Badge>;
+        return <Badge variant="default" className="bg-purple-600"><Crown className="h-3 w-3 mr-1" />Super Admin</Badge>;
       case 'admin':
-        return <Badge variant="secondary" className="flex items-center gap-1"><Shield className="h-3 w-3" />Admin</Badge>;
+        return <Badge variant="secondary"><Shield className="h-3 w-3 mr-1" />Admin</Badge>;
       default:
-        return <Badge variant="outline">Usuário</Badge>;
+        return <Badge variant="outline"><Users className="h-3 w-3 mr-1" />Usuário</Badge>;
     }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString('pt-BR');
   };
 
   if (!isSuperAdmin) {
     return (
       <Card>
         <CardContent className="p-6 text-center">
-          <AlertTriangle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-muted-foreground">Acesso restrito a Super Administradores.</p>
+          <Crown className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+          <h3 className="text-lg font-semibold mb-2">Acesso Restrito</h3>
+          <p className="text-muted-foreground">Esta área é exclusiva para Super Administradores.</p>
         </CardContent>
       </Card>
     );
@@ -205,16 +186,27 @@ export function SuperAdminPanel() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Crown className="h-5 w-5" />
-            Painel Super Admin
+            <Crown className="h-5 w-5 text-purple-600" />
+            Gerenciamento de Funções
           </CardTitle>
           <CardDescription>
-            Gerencie funções e permissões de usuários
+            Gerencie funções dos usuários e adicione novos colaboradores
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold">Usuários do Sistema</h3>
+            <div className="flex gap-4">
+              <div className="text-sm">
+                <span className="font-medium">Total de usuários:</span> {users.length}
+              </div>
+              <div className="text-sm">
+                <span className="font-medium">Admins:</span> {users.filter(u => u.role === 'admin').length}
+              </div>
+              <div className="text-sm">
+                <span className="font-medium">Super Admins:</span> {users.filter(u => u.role === 'super_admin').length}
+              </div>
+            </div>
+            
             <Dialog open={showAddUser} onOpenChange={setShowAddUser}>
               <DialogTrigger asChild>
                 <Button>
@@ -226,7 +218,7 @@ export function SuperAdminPanel() {
                 <DialogHeader>
                   <DialogTitle>Adicionar Novo Usuário</DialogTitle>
                   <DialogDescription>
-                    Crie um novo usuário e defina sua função no sistema
+                    Adicione um novo colaborador ao sistema
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
@@ -234,8 +226,8 @@ export function SuperAdminPanel() {
                     <Label htmlFor="name">Nome</Label>
                     <Input
                       id="name"
-                      value={newUser.name}
-                      onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                      value={newUserName}
+                      onChange={(e) => setNewUserName(e.target.value)}
                       placeholder="Nome completo"
                     />
                   </div>
@@ -244,14 +236,14 @@ export function SuperAdminPanel() {
                     <Input
                       id="email"
                       type="email"
-                      value={newUser.email}
-                      onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                      value={newUserEmail}
+                      onChange={(e) => setNewUserEmail(e.target.value)}
                       placeholder="email@exemplo.com"
                     />
                   </div>
                   <div>
                     <Label htmlFor="role">Função</Label>
-                    <Select value={newUser.role} onValueChange={(value: any) => setNewUser({ ...newUser, role: value })}>
+                    <Select value={newUserRole} onValueChange={(value: any) => setNewUserRole(value)}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -262,21 +254,16 @@ export function SuperAdminPanel() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="flex gap-2">
-                    <Button onClick={addNewUser} className="flex-1">
-                      Criar Usuário
-                    </Button>
-                    <Button variant="outline" onClick={() => setShowAddUser(false)} className="flex-1">
-                      Cancelar
-                    </Button>
-                  </div>
+                  <Button onClick={addNewUser} className="w-full">
+                    Adicionar Usuário
+                  </Button>
                 </div>
               </DialogContent>
             </Dialog>
           </div>
 
           {loading ? (
-            <div className="text-center py-8">Carregando...</div>
+            <div className="text-center py-8">Carregando usuários...</div>
           ) : (
             <Table>
               <TableHeader>
@@ -284,7 +271,7 @@ export function SuperAdminPanel() {
                   <TableHead>Nome</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Função Atual</TableHead>
-                  <TableHead>Data de Criação</TableHead>
+                  <TableHead>Cadastrado em</TableHead>
                   <TableHead>Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -296,13 +283,11 @@ export function SuperAdminPanel() {
                     </TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{getRoleBadge(user.role)}</TableCell>
-                    <TableCell>
-                      {new Date(user.created_at).toLocaleDateString('pt-BR')}
-                    </TableCell>
+                    <TableCell>{formatDate(user.created_at)}</TableCell>
                     <TableCell>
                       <Select
                         value={user.role}
-                        onValueChange={(value: any) => updateUserRole(user.user_id, value)}
+                        onValueChange={(value: any) => changeUserRole(user.user_id, value)}
                       >
                         <SelectTrigger className="w-32">
                           <SelectValue />
@@ -325,44 +310,42 @@ export function SuperAdminPanel() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Settings className="h-5 w-5" />
+            <History className="h-5 w-5" />
             Log de Auditoria
           </CardTitle>
           <CardDescription>
-            Histórico de alterações de funções
+            Histórico de alterações de funções dos usuários
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Usuário</TableHead>
-                <TableHead>Função Anterior</TableHead>
-                <TableHead>Nova Função</TableHead>
-                <TableHead>Alterado por</TableHead>
-                <TableHead>Data</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {auditLog.map((entry) => (
-                <TableRow key={entry.id}>
-                  <TableCell>{entry.user_email || entry.user_id}</TableCell>
-                  <TableCell>{getRoleBadge(entry.old_role)}</TableCell>
-                  <TableCell>{getRoleBadge(entry.new_role)}</TableCell>
-                  <TableCell>{entry.changed_by_email || entry.changed_by}</TableCell>
-                  <TableCell>
-                    {new Date(entry.changed_at).toLocaleDateString('pt-BR', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </TableCell>
+          {auditLogs.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              Nenhuma alteração registrada
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Usuário</TableHead>
+                  <TableHead>Função Anterior</TableHead>
+                  <TableHead>Nova Função</TableHead>
+                  <TableHead>Data</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {auditLogs.map((log) => (
+                  <TableRow key={log.id}>
+                    <TableCell>{log.user_id}</TableCell>
+                    <TableCell>
+                      {log.old_role ? getRoleBadge(log.old_role) : 'N/A'}
+                    </TableCell>
+                    <TableCell>{getRoleBadge(log.new_role)}</TableCell>
+                    <TableCell>{formatDate(log.changed_at)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
     </div>
