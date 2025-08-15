@@ -57,6 +57,7 @@ export type Database = {
           expires_at: string
           id: string
           invitation_status: string
+          invitation_token: string | null
           invited_at: string
           invited_by: string
           name: string
@@ -68,6 +69,7 @@ export type Database = {
           expires_at?: string
           id?: string
           invitation_status?: string
+          invitation_token?: string | null
           invited_at?: string
           invited_by: string
           name: string
@@ -79,6 +81,7 @@ export type Database = {
           expires_at?: string
           id?: string
           invitation_status?: string
+          invitation_token?: string | null
           invited_at?: string
           invited_by?: string
           name?: string

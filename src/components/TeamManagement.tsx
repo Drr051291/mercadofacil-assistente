@@ -102,14 +102,18 @@ export function TeamManagement() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('User not authenticated');
 
-      // Insert new team member
+      // Generate secure invitation token
+      const invitationToken = crypto.randomUUID();
+
+      // Insert new team member with token
       const { error: insertError } = await supabase
         .from('team_members')
         .insert({
           name: name.trim(),
           email: email.toLowerCase().trim(),
           invited_by: user.id,
-          invitation_status: 'pendente'
+          invitation_status: 'pendente',
+          invitation_token: invitationToken
         });
 
       if (insertError) throw insertError;
@@ -119,7 +123,7 @@ export function TeamManagement() {
         body: {
           name: name.trim(),
           email: email.toLowerCase().trim(),
-          inviteId: crypto.randomUUID()
+          invitationToken: invitationToken
         }
       });
 
@@ -176,24 +180,31 @@ export function TeamManagement() {
 
   const handleResendInvite = async (member: TeamMember) => {
     try {
-      const { error } = await supabase.functions.invoke('send-team-invitation', {
-        body: {
-          name: member.name,
-          email: member.email,
-          inviteId: crypto.randomUUID()
-        }
-      });
+      // Generate new invitation token
+      const newInvitationToken = crypto.randomUUID();
 
-      if (error) throw error;
-
-      // Update the invited_at timestamp
-      await supabase
+      // Update member with new token and timestamps
+      const { error: updateError } = await supabase
         .from('team_members')
         .update({ 
+          invitation_token: newInvitationToken,
           invited_at: new Date().toISOString(),
           expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
         })
         .eq('id', member.id);
+
+      if (updateError) throw updateError;
+
+      // Send new invitation email
+      const { error } = await supabase.functions.invoke('send-team-invitation', {
+        body: {
+          name: member.name,
+          email: member.email,
+          invitationToken: newInvitationToken
+        }
+      });
+
+      if (error) throw error;
 
       toast({
         title: "Sucesso!",
