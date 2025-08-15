@@ -138,11 +138,11 @@ export type Database = {
           created_at: string
           email: string | null
           id: string
-          is_admin: boolean
           ml_access_token: string | null
           ml_nickname: string | null
           ml_user_id: string | null
           name: string | null
+          role: Database["public"]["Enums"]["user_role"]
           updated_at: string
           user_id: string
         }
@@ -150,11 +150,11 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
-          is_admin?: boolean
           ml_access_token?: string | null
           ml_nickname?: string | null
           ml_user_id?: string | null
           name?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
           user_id: string
         }
@@ -162,12 +162,42 @@ export type Database = {
           created_at?: string
           email?: string | null
           id?: string
-          is_admin?: boolean
           ml_access_token?: string | null
           ml_nickname?: string | null
           ml_user_id?: string | null
           name?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      role_audit_log: {
+        Row: {
+          changed_at: string
+          changed_by: string
+          id: string
+          new_role: Database["public"]["Enums"]["user_role"]
+          old_role: Database["public"]["Enums"]["user_role"] | null
+          reason: string | null
+          user_id: string
+        }
+        Insert: {
+          changed_at?: string
+          changed_by: string
+          id?: string
+          new_role: Database["public"]["Enums"]["user_role"]
+          old_role?: Database["public"]["Enums"]["user_role"] | null
+          reason?: string | null
+          user_id: string
+        }
+        Update: {
+          changed_at?: string
+          changed_by?: string
+          id?: string
+          new_role?: Database["public"]["Enums"]["user_role"]
+          old_role?: Database["public"]["Enums"]["user_role"] | null
+          reason?: string | null
           user_id?: string
         }
         Relationships: []
@@ -216,10 +246,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
+      is_admin_or_super: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      is_super_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      user_role: "user" | "admin" | "super_admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -346,6 +387,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_role: ["user", "admin", "super_admin"],
+    },
   },
 } as const
