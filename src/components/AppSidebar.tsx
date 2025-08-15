@@ -9,7 +9,8 @@ import {
   BarChart3,
   Users,
   Target,
-  LogOut
+  LogOut,
+  Store
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -119,6 +120,11 @@ export function AppSidebar() {
     return 'Usuário';
   };
 
+  const getStoreName = () => {
+    if (profile?.ml_nickname) return profile.ml_nickname;
+    return 'Loja não conectada';
+  };
+
   return (
     <Sidebar
       className={collapsed ? "w-16" : "w-64"}
@@ -127,12 +133,15 @@ export function AppSidebar() {
       <SidebarHeader className="border-b p-4">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 gradient-ml rounded-lg flex items-center justify-center flex-shrink-0">
-            <span className="text-primary-foreground font-bold text-sm">M</span>
+            <span className="text-foreground font-bold text-sm">M</span>
           </div>
           {!collapsed && (
             <div>
-              <h2 className="font-bold text-lg text-primary">MercadoFácil</h2>
-              <p className="text-xs text-muted-foreground">Assistente para Vendedores</p>
+              <h2 className="font-bold text-lg text-foreground">MercadoFácil</h2>
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Store className="w-3 h-3" />
+                {getStoreName()}
+              </div>
             </div>
           )}
         </div>
@@ -179,13 +188,13 @@ export function AppSidebar() {
       <SidebarFooter className="border-t p-4">
         <div className="flex items-center gap-3">
           <Avatar className="w-8 h-8 flex-shrink-0">
-            <AvatarFallback className="text-xs bg-primary/10 text-primary">
+            <AvatarFallback className="text-xs bg-primary/10 text-foreground">
               {getUserInitials()}
             </AvatarFallback>
           </Avatar>
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">{getDisplayName()}</p>
+              <p className="text-sm font-medium truncate text-foreground">{getDisplayName()}</p>
               <p className="text-xs text-muted-foreground truncate">{profile?.email}</p>
             </div>
           )}

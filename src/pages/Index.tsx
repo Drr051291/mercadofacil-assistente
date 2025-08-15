@@ -2,19 +2,15 @@ import { Header } from "@/components/Header";
 import { MetricCard } from "@/components/MetricCard";
 import { SalesChart } from "@/components/SalesChart";
 import { TopProducts } from "@/components/TopProducts";
-import { AlertsPanel } from "@/components/AlertsPanel";
-import { AdsAnalysis } from "@/components/AdsAnalysis";
-import MLIntegration from "@/components/MLIntegration";
+import { EnhancedMetrics } from "@/components/EnhancedMetrics";
+import { CompetitiveInsights } from "@/components/CompetitiveInsights";
+import { TopClickedProducts } from "@/components/TopClickedProducts";
 import { AppLayout } from "@/components/AppLayout";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   DollarSign, 
   ShoppingCart, 
   TrendingUp, 
-  Package,
-  Users,
-  Eye,
-  Settings
+  Users
 } from "lucide-react";
 
 const Index = () => {
@@ -25,9 +21,9 @@ const Index = () => {
         subtitle="Visão geral das suas vendas e performance no Mercado Livre" 
       />
       
-      <div className="p-6">
+      <div className="p-6 space-y-8">
         {/* Métricas Principais */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <MetricCard
             title="Vendas Hoje"
             value="--"
@@ -58,72 +54,23 @@ const Index = () => {
           />
         </div>
 
-        {/* Tabs Principais */}
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full lg:w-auto grid-cols-5">
-            <TabsTrigger value="overview" className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              Visão Geral
-            </TabsTrigger>
-            <TabsTrigger value="ads" className="flex items-center gap-2">
-              <DollarSign className="h-4 w-4" />
-              Mercado Ads
-            </TabsTrigger>
-            <TabsTrigger value="products" className="flex items-center gap-2">
-              <Package className="h-4 w-4" />
-              Produtos
-            </TabsTrigger>
-            <TabsTrigger value="alerts" className="flex items-center gap-2">
-              <Eye className="h-4 w-4" />
-              Alertas
-            </TabsTrigger>
-            <TabsTrigger value="integration" className="flex items-center gap-2">
-              <Settings className="h-4 w-4" />
-              Integração
-            </TabsTrigger>
-          </TabsList>
+        {/* Métricas Avançadas */}
+        <div>
+          <h2 className="text-xl font-semibold text-foreground mb-6">Métricas Avançadas</h2>
+          <EnhancedMetrics />
+        </div>
 
-          <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <SalesChart />
-              <TopProducts />
-            </div>
-          </TabsContent>
+        {/* Gráficos e Análises */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <SalesChart />
+          <TopProducts />
+        </div>
 
-          <TabsContent value="ads" className="space-y-6">
-            <AdsAnalysis />
-          </TabsContent>
-
-          <TabsContent value="products" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <TopProducts />
-              <div className="grid grid-cols-1 gap-4">
-                <MetricCard
-                  title="Produtos Ativos"
-                  value="--"
-                  change="Conecte sua conta ML"
-                  changeType="neutral"
-                  icon={Package}
-                />
-                <MetricCard
-                  title="Estoque Total"
-                  value="--"
-                  change="Conecte sua conta ML"
-                  changeType="neutral"
-                  icon={Package}
-                />
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="alerts" className="space-y-6">
-            <AlertsPanel />
-          </TabsContent>
-
-          <TabsContent value="integration" className="space-y-6">
-            <MLIntegration />
-          </TabsContent>
-        </Tabs>
+        {/* Produtos Mais Clicados e Insights Competitivos */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <TopClickedProducts />
+          <CompetitiveInsights />
+        </div>
       </div>
     </AppLayout>
   );

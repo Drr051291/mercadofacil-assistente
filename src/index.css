@@ -11,29 +11,29 @@
     --ml-yellow: 60 100% 50%;           /* #FFE600 */
     --ml-blue: 220 100% 32%;            /* #0033A0 */
     --ml-light-gray: 0 0% 96%;          /* #F5F5F5 */
-    --ml-dark-gray: 0 0% 30%;           /* #4D4D4D */
+    --ml-dark-gray: 0 0% 20%;           /* #333333 */
     
-    /* System Colors */
-    --background: 0 0% 100%;            /* White */
-    --foreground: 0 0% 0%;              /* Black */
+    /* System Colors - Better readability */
+    --background: 0 0% 99%;             /* Very light gray */
+    --foreground: 0 0% 9%;              /* Dark gray for text */
     
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
+    --card-foreground: 0 0% 9%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
+    --popover-foreground: 0 0% 9%;
     
-    --primary: 60 100% 50%;             /* ML Yellow */
-    --primary-foreground: 0 0% 0%;
+    --primary: 60 100% 50%;             /* ML Yellow - only for highlights */
+    --primary-foreground: 0 0% 9%;
     
-    --secondary: 220 100% 32%;          /* ML Blue */
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;              /* Light background */
+    --secondary-foreground: 0 0% 9%;
     
     --muted: 0 0% 96%;                  /* Light Gray */
-    --muted-foreground: 0 0% 30%;       /* Dark Gray */
+    --muted-foreground: 0 0% 30%;       /* Readable gray */
     
     --accent: 60 100% 50%;
-    --accent-foreground: 0 0% 0%;
+    --accent-foreground: 0 0% 9%;
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -43,8 +43,14 @@
     --ring: 60 100% 50%;
     
     /* Success/Growth Colors */
-    --success: 120 60% 50%;
+    --success: 142 69% 45%;             /* Green */
     --success-foreground: 0 0% 100%;
+    --success-light: 142 69% 45% / 0.1; /* Green with transparency */
+    
+    /* Danger/Loss Colors */
+    --danger: 0 84% 60%;                /* Red */
+    --danger-foreground: 0 0% 100%;
+    --danger-light: 0 84% 60% / 0.1;    /* Red with transparency */
     
     /* Warning Colors */
     --warning: 38 92% 50%;
@@ -55,28 +61,24 @@
     --gradient-blue: linear-gradient(135deg, hsl(220 100% 32%), hsl(230 100% 40%));
     --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%));
     
-    /* Shadows */
-    --shadow-soft: 0 2px 8px hsl(0 0% 0% / 0.1);
-    --shadow-ml: 0 4px 20px hsl(60 100% 50% / 0.25);
-    --shadow-blue: 0 4px 20px hsl(220 100% 32% / 0.25);
+    /* Shadows - More subtle */
+    --shadow-soft: 0 1px 3px hsl(0 0% 0% / 0.08), 0 1px 2px hsl(0 0% 0% / 0.06);
+    --shadow-md: 0 4px 6px hsl(0 0% 0% / 0.07), 0 2px 4px hsl(0 0% 0% / 0.06);
+    --shadow-lg: 0 10px 15px hsl(0 0% 0% / 0.1), 0 4px 6px hsl(0 0% 0% / 0.1);
+    --shadow-ml: 0 4px 20px hsl(60 100% 50% / 0.15);
+    --shadow-blue: 0 4px 20px hsl(220 100% 32% / 0.15);
     
     --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
+    /* Sidebar with better contrast */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 20%;
+    --sidebar-primary: 0 0% 9%;
     --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 9%;
     --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 60 100% 50%;
   }
 
   .dark {
@@ -146,6 +148,14 @@
     box-shadow: var(--shadow-soft);
   }
   
+  .shadow-md {
+    box-shadow: var(--shadow-md);
+  }
+  
+  .shadow-lg {
+    box-shadow: var(--shadow-lg);
+  }
+  
   .gradient-ml {
     background: var(--gradient-ml);
   }
@@ -156,5 +166,21 @@
   
   .gradient-subtle {
     background: var(--gradient-subtle);
+  }
+  
+  .text-success {
+    color: hsl(var(--success));
+  }
+  
+  .text-danger {
+    color: hsl(var(--danger));
+  }
+  
+  .bg-success-light {
+    background-color: hsl(var(--success-light));
+  }
+  
+  .bg-danger-light {
+    background-color: hsl(var(--danger-light));
   }
 }
