@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Bell, Settings } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { NotificationBell } from "./NotificationBell";
+import { RoleBadge } from "./RoleBadge";
 
 interface HeaderProps {
   title?: string;
@@ -30,6 +31,7 @@ export const Header = ({ title, subtitle }: HeaderProps) => {
           </div>
           
           <div className="flex items-center space-x-3">
+            <RoleBadge />
             <NotificationBell />
             <Button variant="ghost" size="icon">
               <Settings className="h-5 w-5" />

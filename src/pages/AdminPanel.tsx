@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { Users, Activity, AlertTriangle, TrendingUp } from 'lucide-react';
 import { AdminNotifications } from '@/components/AdminNotifications';
+import { SuperAdminPanel } from '@/components/SuperAdminPanel';
 
 interface AdminProfile {
   id: string;
@@ -145,9 +146,10 @@ export default function AdminPanel() {
 
       <main className="container mx-auto px-6 py-8">
         <Tabs defaultValue="users" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="users">Usuários</TabsTrigger>
             <TabsTrigger value="notifications">Notificações</TabsTrigger>
+            <TabsTrigger value="super-admin">Super Admin</TabsTrigger>
           </TabsList>
           
           <TabsContent value="users" className="space-y-6">
@@ -278,6 +280,10 @@ export default function AdminPanel() {
           
           <TabsContent value="notifications">
             <AdminNotifications />
+          </TabsContent>
+          
+          <TabsContent value="super-admin">
+            <SuperAdminPanel />
           </TabsContent>
         </Tabs>
       </main>

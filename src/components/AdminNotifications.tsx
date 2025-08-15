@@ -33,11 +33,11 @@ export function AdminNotifications() {
 
     const { data: profile } = await supabase
       .from('profiles')
-      .select('is_admin')
+      .select('role')
       .eq('user_id', user.id)
       .single();
 
-    setIsAdmin(profile?.is_admin || false);
+    setIsAdmin(['admin', 'super_admin'].includes(profile?.role || ''));
   };
 
   const fetchUsers = async () => {
