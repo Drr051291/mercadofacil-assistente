@@ -16,9 +16,11 @@ interface Profile {
 export default function MLIntegration() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mlConfig, setMlConfig] = useState<{clientId: string; redirectUri: string} | null>(null);
 
   useEffect(() => {
     fetchProfile();
+    fetchMLConfig();
   }, []);
 
   const fetchProfile = async () => {
@@ -44,21 +46,51 @@ export default function MLIntegration() {
     }
   };
 
+  const fetchMLConfig = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('ml-config');
+      
+      if (error) {
+        console.error('Erro ao buscar configuração ML:', error);
+        toast.error('Erro ao carregar configuração do ML');
+        return;
+      }
+
+      console.log('Configuração ML carregada:', {
+        hasClientId: !!data.clientId,
+        clientIdPrefix: data.clientId?.substring(0, 4) + '...',
+        redirectUri: data.redirectUri
+      });
+
+      setMlConfig(data);
+    } catch (error) {
+      console.error('Erro ao buscar config ML:', error);
+      toast.error('Erro ao carregar configuração');
+    }
+  };
+
   const handleConnectML = () => {
-    // URL de autorização do Mercado Livre
-    const clientId = '8738187321820958'; // Seu Client ID do ML
-    const redirectUri = encodeURIComponent(`${window.location.origin}/ml-callback`);
-    const state = Math.random().toString(36).substring(7); // Estado para segurança
+    if (!mlConfig) {
+      toast.error('Configuração do ML não carregada');
+      return;
+    }
+
+    const { clientId, redirectUri } = mlConfig;
+    const state = Math.random().toString(36).substring(7);
+    
+    console.log('Iniciando conexão ML:', {
+      clientIdPrefix: clientId.substring(0, 4) + '...',
+      redirectUri,
+      state
+    });
     
     const authUrl = `https://auth.mercadolivre.com.br/authorization?` +
       `response_type=code&` +
       `client_id=${clientId}&` +
-      `redirect_uri=${redirectUri}&` +
+      `redirect_uri=${encodeURIComponent(redirectUri)}&` +
       `state=${state}`;
 
-    // Salvar state no localStorage para verificar depois
     localStorage.setItem('ml_auth_state', state);
-    
     window.location.href = authUrl;
   };
 
@@ -167,8 +199,12 @@ export default function MLIntegration() {
               </ul>
             </div>
             
-            <Button onClick={handleConnectML} className="w-full">
-              Conectar com Mercado Livre
+            <Button 
+              onClick={handleConnectML} 
+              className="w-full"
+              disabled={!mlConfig}
+            >
+              {mlConfig ? 'Conectar com Mercado Livre' : 'Carregando configuração...'}
             </Button>
             
             <div className="text-xs text-muted-foreground text-center">
