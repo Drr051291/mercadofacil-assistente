@@ -33,11 +33,15 @@ serve(async (req) => {
     // Create a client with the user's token to verify their identity
     const supabaseUser = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      {
+        global: {
+          headers: {
+            Authorization: authHeader
+          }
+        }
+      }
     )
-
-    // Set the auth header for the user client
-    supabaseUser.auth.setAuth(authHeader.replace('Bearer ', ''))
 
     // Get the current user to verify they're authenticated
     const { data: { user }, error: userError } = await supabaseUser.auth.getUser()
