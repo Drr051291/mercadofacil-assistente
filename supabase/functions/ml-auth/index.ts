@@ -57,19 +57,33 @@ serve(async (req) => {
         client_id: clientId,
         client_secret: clientSecret,
         code: code,
-        redirect_uri: 'https://pwkczhxdgivypgoxpbjz--vite.web.val.run/ml-callback'
+        redirect_uri: 'https://fe2ff296-158a-4521-aaa1-638d34c90c87.lovableproject.com/ml-callback'
       }),
     });
 
     const tokenData = await tokenResponse.json();
-    console.log('Resposta da API do ML para token:', tokenData);
+    console.log('Resposta da API do ML para token:', {
+      success: tokenResponse.ok,
+      status: tokenResponse.status,
+      hasError: !!tokenData.error,
+      hasAccessToken: !!tokenData.access_token,
+      userId: tokenData.user_id
+    });
 
     if (!tokenResponse.ok || tokenData.error) {
-      console.error('Erro ao obter token do ML:', tokenData);
+      const errorDetails = {
+        status: tokenResponse.status,
+        error: tokenData.error,
+        errorDescription: tokenData.error_description,
+        message: tokenData.message
+      };
+      console.error('Erro detalhado ao obter token do ML:', errorDetails);
+      
       return new Response(
         JSON.stringify({ 
           success: false, 
-          error: `Erro do ML: ${tokenData.error_description || tokenData.error || 'Erro desconhecido'}` 
+          error: `Erro do ML: ${tokenData.error_description || tokenData.error || 'Erro desconhecido'}`,
+          details: errorDetails
         }),
         { 
           status: 400,
@@ -91,12 +105,24 @@ serve(async (req) => {
     });
 
     const userData = await userResponse.json();
-    console.log('Dados do usuário ML:', userData);
+    console.log('Dados do usuário ML obtidos:', {
+      success: userResponse.ok,
+      status: userResponse.status,
+      hasNickname: !!userData.nickname,
+      userId: userData.id
+    });
 
     if (!userResponse.ok) {
-      console.error('Erro ao obter dados do usuário ML:', userData);
+      console.error('Erro ao obter dados do usuário ML:', {
+        status: userResponse.status,
+        error: userData
+      });
       return new Response(
-        JSON.stringify({ success: false, error: 'Erro ao obter dados do usuário' }),
+        JSON.stringify({ 
+          success: false, 
+          error: 'Erro ao obter dados do usuário',
+          details: { status: userResponse.status, userData }
+        }),
         { 
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 

@@ -52,7 +52,7 @@ export default function MLCallback() {
         if (exchangeError) {
           console.error('Erro ao trocar código por token:', exchangeError);
           setStatus('error');
-          setMessage('Erro ao completar autorização');
+          setMessage(`Erro ao completar autorização: ${exchangeError.message || 'Erro desconhecido'}`);
           return;
         }
 
@@ -66,8 +66,12 @@ export default function MLCallback() {
             navigate('/');
           }, 2000);
         } else {
+          console.error('Resposta da edge function:', data);
           setStatus('error');
-          setMessage(data.error || 'Erro desconhecido');
+          setMessage(data.error || 'Erro desconhecido na integração');
+          if (data.details) {
+            console.error('Detalhes do erro:', data.details);
+          }
         }
 
       } catch (error) {
