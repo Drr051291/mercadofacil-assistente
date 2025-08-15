@@ -43,7 +43,12 @@ serve(async (req) => {
       );
     }
 
-    console.log('Iniciando troca de código por token do ML...');
+    console.log('Iniciando troca de código por token do ML:', {
+      clientIdPrefix: clientId.substring(0, 4) + '...',
+      hasClientSecret: !!clientSecret,
+      codePrefix: code.substring(0, 8) + '...',
+      redirectUri: 'https://fe2ff296-158a-4521-aaa1-638d34c90c87.lovableproject.com/ml-callback'
+    });
 
     // 1. Trocar código por access token
     const tokenResponse = await fetch('https://api.mercadolibre.com/oauth/token', {
