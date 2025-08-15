@@ -9,6 +9,7 @@ import { TimeRangeSelector, TimeRange } from "@/components/TimeRangeSelector";
 import { AppLayout } from "@/components/AppLayout";
 import { ConnectionStatus } from "@/components/ConnectionStatus";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { 
   DollarSign, 
   ShoppingCart, 
@@ -19,6 +20,7 @@ import {
 const Index = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>();
   const [isConnected] = useState(false); // This would come from auth context in real app
+  const navigate = useNavigate();
 
   const handleTimeRangeChange = (range: TimeRange) => {
     setSelectedTimeRange(range);
@@ -27,8 +29,7 @@ const Index = () => {
   };
 
   const handleConnect = () => {
-    // This would redirect to ML auth or show connection modal
-    console.log('Connecting to Mercado Livre...');
+    navigate('/integracao');
   };
   return (
     <AppLayout>
