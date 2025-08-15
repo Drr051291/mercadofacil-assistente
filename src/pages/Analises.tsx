@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { AppLayout } from "@/components/AppLayout";
 import { CompetitiveInsights } from "@/components/CompetitiveInsights";
+import { CompetitiveAnalysisFeature } from "@/components/CompetitiveAnalysisFeature";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Analises = () => {
@@ -12,7 +13,10 @@ const Analises = () => {
       />
       
       <div className="p-6 space-y-8">
-        {/* Análise Competitiva */}
+        {/* Nova Análise Competitiva com IA */}
+        <CompetitiveAnalysisFeature />
+        
+        {/* Análise Competitiva Estática */}
         <CompetitiveInsights />
 
         {/* Placeholder para mais análises */}
