@@ -100,8 +100,8 @@ export function AppSidebar() {
 
   const getNavCls = ({ isActive }: { isActive: boolean }) =>
     isActive 
-      ? "bg-primary/10 text-primary border-r-2 border-primary font-medium" 
-      : "hover:bg-muted/50 text-muted-foreground hover:text-foreground";
+      ? "bg-muted text-foreground border-r-2 border-foreground font-medium" 
+      : "hover:bg-muted/50 text-foreground hover:text-foreground";
 
   const getUserInitials = () => {
     if (profile?.name) {
@@ -188,7 +188,7 @@ export function AppSidebar() {
       <SidebarFooter className="border-t p-4">
         <div className="flex items-center gap-3">
           <Avatar className="w-8 h-8 flex-shrink-0">
-            <AvatarFallback className="text-xs bg-primary/10 text-foreground">
+            <AvatarFallback className="text-xs bg-muted text-foreground">
               {getUserInitials()}
             </AvatarFallback>
           </Avatar>

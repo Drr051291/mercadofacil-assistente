@@ -11,6 +11,11 @@ import Auth from "./pages/Auth";
 import AdminPanel from "./pages/AdminPanel";
 import MLCallback from "./pages/MLCallback";
 import IntegracaoML from "./pages/IntegracaoML";
+import Vendas from "./pages/Vendas";
+import MercadoAds from "./pages/MercadoAds";
+import Produtos from "./pages/Produtos";
+import Analises from "./pages/Analises";
+import Alertas from "./pages/Alertas";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -59,6 +64,11 @@ const App = () => {
             <Route path="/ml-callback" element={<MLCallback />} />
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/integracao" element={user ? <IntegracaoML /> : <Auth />} />
+            <Route path="/vendas" element={user ? <Vendas /> : <Auth />} />
+            <Route path="/ads" element={user ? <MercadoAds /> : <Auth />} />
+            <Route path="/produtos" element={user ? <Produtos /> : <Auth />} />
+            <Route path="/analises" element={user ? <Analises /> : <Auth />} />
+            <Route path="/alertas" element={user ? <Alertas /> : <Auth />} />
             <Route path="/" element={user ? <Index /> : <Auth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
