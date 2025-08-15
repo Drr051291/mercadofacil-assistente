@@ -41,23 +41,23 @@ export const TopProducts = () => {
   return (
     <Card className="shadow-soft">
       <CardHeader>
-        <CardTitle className="text-secondary">Produtos Mais Vendidos</CardTitle>
+        <CardTitle className="text-foreground font-semibold">Produtos Mais Vendidos</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {topProducts.map((product, index) => (
-            <div key={product.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+            <div key={product.id} className="flex items-center justify-between p-4 rounded-lg bg-muted/40 hover:bg-muted/60 transition-colors">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-primary/10 border border-primary/20 rounded-full flex items-center justify-center">
                   <span className="text-primary font-bold text-sm">{index + 1}</span>
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">{product.name}</p>
-                  <p className="text-sm text-muted-foreground">{product.sales} vendas</p>
+                  <p className="font-semibold text-foreground">{product.name}</p>
+                  <p className="text-sm text-muted-foreground font-medium">{product.sales} vendas</p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="font-semibold text-foreground">{product.revenue}</p>
+                <p className="font-bold text-foreground text-lg">{product.revenue}</p>
                 <div className="flex items-center gap-1">
                   {product.trend === 'up' ? (
                     <TrendingUp className="h-3 w-3 text-success" />

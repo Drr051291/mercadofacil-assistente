@@ -25,26 +25,42 @@ export const MetricCard = ({
     neutral: 'text-muted-foreground'
   }[changeType];
 
+  const isConnected = value !== "--";
+  
   return (
     <Card className={cn("shadow-soft hover:shadow-ml transition-shadow", className)}>
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <p className="text-muted-foreground text-sm font-medium mb-1">
+            <p className="text-muted-foreground text-sm font-semibold mb-2 uppercase tracking-wider">
               {title}
             </p>
-            <p className="text-3xl font-bold text-foreground mb-2">
+            <p className={cn(
+              "text-3xl font-bold mb-2",
+              isConnected ? "text-foreground" : "text-muted-foreground"
+            )}>
               {value}
             </p>
             {change && (
-              <p className={cn("text-sm font-medium", changeColor)}>
+              <p className={cn(
+                "text-sm font-medium",
+                isConnected ? changeColor : "text-muted-foreground"
+              )}>
                 {change}
               </p>
             )}
           </div>
           <div className="ml-4">
-            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-              <Icon className="h-6 w-6 text-primary" />
+            <div className={cn(
+              "w-12 h-12 rounded-lg flex items-center justify-center transition-colors",
+              isConnected 
+                ? "bg-primary/10 border border-primary/20" 
+                : "bg-muted/50 border border-muted"
+            )}>
+              <Icon className={cn(
+                "h-6 w-6",
+                isConnected ? "text-primary" : "text-muted-foreground"
+              )} />
             </div>
           </div>
         </div>

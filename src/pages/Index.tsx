@@ -7,6 +7,7 @@ import { CompetitiveInsights } from "@/components/CompetitiveInsights";
 import { TopClickedProducts } from "@/components/TopClickedProducts";
 import { TimeRangeSelector, TimeRange } from "@/components/TimeRangeSelector";
 import { AppLayout } from "@/components/AppLayout";
+import { ConnectionStatus } from "@/components/ConnectionStatus";
 import { useState } from "react";
 import { 
   DollarSign, 
@@ -17,11 +18,17 @@ import {
 
 const Index = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRange>();
+  const [isConnected] = useState(false); // This would come from auth context in real app
 
   const handleTimeRangeChange = (range: TimeRange) => {
     setSelectedTimeRange(range);
     console.log('Período selecionado:', range);
     // Aqui você pode implementar a lógica para filtrar os dados baseado no período
+  };
+
+  const handleConnect = () => {
+    // This would redirect to ML auth or show connection modal
+    console.log('Connecting to Mercado Livre...');
   };
   return (
     <AppLayout>
@@ -38,6 +45,14 @@ const Index = () => {
       </div>
       
       <div className="px-6 pb-6 space-y-8">
+        {/* Connection Status */}
+        {!isConnected && (
+          <ConnectionStatus 
+            connected={isConnected}
+            onConnect={handleConnect}
+          />
+        )}
+
         {/* Métricas Principais */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <MetricCard
@@ -72,7 +87,12 @@ const Index = () => {
 
         {/* Métricas Avançadas */}
         <div>
-          <h2 className="text-xl font-semibold text-foreground mb-6">Métricas Avançadas</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-foreground">Métricas Avançadas</h2>
+            {isConnected && (
+              <ConnectionStatus connected={isConnected} compact />
+            )}
+          </div>
           <EnhancedMetrics />
         </div>
 

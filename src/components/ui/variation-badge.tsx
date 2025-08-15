@@ -14,11 +14,11 @@ export function VariationBadge({ value, type, className }: VariationBadgeProps) 
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium",
+        "inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold",
         {
-          "bg-success-light text-success": type === "positive",
-          "bg-danger-light text-danger": type === "negative",
-          "bg-muted text-muted-foreground": type === "neutral",
+          "bg-success-light text-success border border-success/20": type === "positive",
+          "bg-danger-light text-danger border border-danger/20": type === "negative",
+          "bg-muted text-muted-foreground border border-muted": type === "neutral",
         },
         className
       )}

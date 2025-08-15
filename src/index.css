@@ -7,8 +7,9 @@
 
 @layer base {
   :root {
-    /* Mercado Livre Brand Colors */
-    --ml-yellow: 60 100% 50%;           /* #FFE600 */
+    /* Mercado Livre Brand Colors - Improved Contrast */
+    --ml-yellow: 45 100% 47%;           /* #FFC107 - Better contrast */
+    --ml-orange: 38 92% 50%;            /* #FF9800 - Alternative accent */
     --ml-blue: 220 100% 32%;            /* #0033A0 */
     --ml-light-gray: 0 0% 96%;          /* #F5F5F5 */
     --ml-dark-gray: 0 0% 20%;           /* #333333 */
@@ -23,7 +24,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 9%;
     
-    --primary: 60 100% 50%;             /* ML Yellow - only for highlights */
+    --primary: 45 100% 47%;             /* Improved ML Yellow for better contrast */
     --primary-foreground: 0 0% 9%;
     
     --secondary: 0 0% 96%;              /* Light background */
@@ -32,7 +33,7 @@
     --muted: 0 0% 96%;                  /* Light Gray */
     --muted-foreground: 0 0% 30%;       /* Readable gray */
     
-    --accent: 60 100% 50%;
+    --accent: 45 100% 47%;              /* Consistent with primary */
     --accent-foreground: 0 0% 9%;
     
     --destructive: 0 84% 60%;
@@ -40,7 +41,7 @@
     
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 60 100% 50%;
+    --ring: 45 100% 47%;
     
     /* Success/Growth Colors */
     --success: 142 69% 45%;             /* Green */
@@ -56,8 +57,8 @@
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 0%;
     
-    /* Gradients */
-    --gradient-ml: linear-gradient(135deg, hsl(60 100% 50%), hsl(45 100% 55%));
+    /* Gradients - Updated for better contrast */
+    --gradient-ml: linear-gradient(135deg, hsl(45 100% 47%), hsl(38 92% 50%));
     --gradient-blue: linear-gradient(135deg, hsl(220 100% 32%), hsl(230 100% 40%));
     --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%));
     
@@ -65,7 +66,7 @@
     --shadow-soft: 0 1px 3px hsl(0 0% 0% / 0.08), 0 1px 2px hsl(0 0% 0% / 0.06);
     --shadow-md: 0 4px 6px hsl(0 0% 0% / 0.07), 0 2px 4px hsl(0 0% 0% / 0.06);
     --shadow-lg: 0 10px 15px hsl(0 0% 0% / 0.1), 0 4px 6px hsl(0 0% 0% / 0.1);
-    --shadow-ml: 0 4px 20px hsl(60 100% 50% / 0.15);
+    --shadow-ml: 0 4px 20px hsl(45 100% 47% / 0.15);
     --shadow-blue: 0 4px 20px hsl(220 100% 32% / 0.15);
     
     --radius: 0.75rem;
@@ -78,7 +79,7 @@
     --sidebar-accent: 0 0% 96%;
     --sidebar-accent-foreground: 0 0% 9%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 60 100% 50%;
+    --sidebar-ring: 45 100% 47%;
   }
 
   .dark {
