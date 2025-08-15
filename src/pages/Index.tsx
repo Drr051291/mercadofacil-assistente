@@ -5,6 +5,7 @@ import { TopProducts } from "@/components/TopProducts";
 import { AlertsPanel } from "@/components/AlertsPanel";
 import { AdsAnalysis } from "@/components/AdsAnalysis";
 import MLIntegration from "@/components/MLIntegration";
+import { AppLayout } from "@/components/AppLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   DollarSign, 
@@ -18,38 +19,41 @@ import {
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gradient-subtle">
-      <Header />
+    <AppLayout>
+      <Header 
+        title="Dashboard" 
+        subtitle="Visão geral das suas vendas e performance no Mercado Livre" 
+      />
       
-      <main className="container mx-auto px-6 py-8">
+      <div className="p-6">
         {/* Métricas Principais */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <MetricCard
             title="Vendas Hoje"
-            value="R$ 8.547"
-            change="+12% vs ontem"
-            changeType="positive"
+            value="--"
+            change="Conecte sua conta ML"
+            changeType="neutral"
             icon={DollarSign}
           />
           <MetricCard
             title="Pedidos"
-            value="23"
-            change="+8% vs ontem"
-            changeType="positive"
+            value="--"
+            change="Conecte sua conta ML"
+            changeType="neutral"
             icon={ShoppingCart}
           />
           <MetricCard
             title="Visitantes"
-            value="1.429"
-            change="+5% vs ontem"
-            changeType="positive"
+            value="--"
+            change="Conecte sua conta ML"
+            changeType="neutral"
             icon={Users}
           />
           <MetricCard
             title="Taxa Conversão"
-            value="3.2%"
-            change="-0.5% vs ontem"
-            changeType="negative"
+            value="--"
+            change="Conecte sua conta ML"
+            changeType="neutral"
             icon={TrendingUp}
           />
         </div>
@@ -96,15 +100,15 @@ const Index = () => {
               <div className="grid grid-cols-1 gap-4">
                 <MetricCard
                   title="Produtos Ativos"
-                  value="156"
-                  change="+3 novos esta semana"
-                  changeType="positive"
+                  value="--"
+                  change="Conecte sua conta ML"
+                  changeType="neutral"
                   icon={Package}
                 />
                 <MetricCard
                   title="Estoque Total"
-                  value="2.847"
-                  change="Valor: R$ 45.200"
+                  value="--"
+                  change="Conecte sua conta ML"
                   changeType="neutral"
                   icon={Package}
                 />
@@ -120,8 +124,8 @@ const Index = () => {
             <MLIntegration />
           </TabsContent>
         </Tabs>
-      </main>
-    </div>
+      </div>
+    </AppLayout>
   );
 };
 

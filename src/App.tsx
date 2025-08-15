@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import AdminPanel from "./pages/AdminPanel";
 import MLCallback from "./pages/MLCallback";
+import IntegracaoML from "./pages/IntegracaoML";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -57,6 +58,7 @@ const App = () => {
             <Route path="/auth" element={<Auth />} />
             <Route path="/ml-callback" element={<MLCallback />} />
             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/integracao" element={user ? <IntegracaoML /> : <Auth />} />
             <Route path="/" element={user ? <Index /> : <Auth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
