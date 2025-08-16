@@ -8,6 +8,7 @@ import { TopClickedProducts } from "@/components/TopClickedProducts";
 import { TimeRangeSelector, TimeRange } from "@/components/TimeRangeSelector";
 import { AppLayout } from "@/components/AppLayout";
 import { ConnectionStatus } from "@/components/ConnectionStatus";
+import { MLCredentialsTest } from "@/components/MLCredentialsTest";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -53,6 +54,12 @@ const Index = () => {
             onConnect={handleConnect}
           />
         )}
+
+        {/* Teste de Credenciais ML */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-foreground">Status das Credenciais do Mercado Livre</h2>
+          <MLCredentialsTest />
+        </div>
 
         {/* Métricas Principais */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
