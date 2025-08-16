@@ -43,11 +43,15 @@ serve(async (req) => {
       );
     }
 
+    // Obter a origem da requisição para construir a URL de redirect dinamicamente
+    const origin = req.headers.get('origin') || req.headers.get('referer')?.split('/').slice(0, 3).join('/');
+    const redirectUri = origin ? `${origin}/ml-callback` : 'https://pwkczhxdgivypgoxpbjz.supabase.co/ml-callback';
+
     console.log('Iniciando troca de código por token do ML:', {
       clientIdPrefix: clientId.substring(0, 4) + '...',
       hasClientSecret: !!clientSecret,
       codePrefix: code.substring(0, 8) + '...',
-      redirectUri: 'https://fe2ff296-158a-4521-aaa1-638d34c90c87.lovableproject.com/ml-callback'
+      redirectUri
     });
 
     // 1. Trocar código por access token
@@ -62,7 +66,7 @@ serve(async (req) => {
         client_id: clientId,
         client_secret: clientSecret,
         code: code,
-        redirect_uri: 'https://fe2ff296-158a-4521-aaa1-638d34c90c87.lovableproject.com/ml-callback'
+        redirect_uri: redirectUri
       }),
     });
 

@@ -24,20 +24,54 @@ interface AdminProfile {
 }
 
 export default function AdminPanel() {
-  const [adminEmail, setAdminEmail] = useState('');
-  const [adminPassword, setAdminPassword] = useState('');
+  const [user, setUser] = useState(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [profiles, setProfiles] = useState<AdminProfile[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const handleAdminLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    checkAuthAndRole();
     
-    if (adminEmail === 'contato@vivazagencia.com.br' && adminPassword === '123456') {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (session?.user) {
+          setUser(session.user);
+          checkUserRole(session.user.id);
+        } else {
+          setUser(null);
+          setUserRole(null);
+          setIsAuthenticated(false);
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const checkAuthAndRole = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
+      setUser(session.user);
+      await checkUserRole(session.user.id);
+    }
+  };
+
+  const checkUserRole = async (userId: string) => {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('user_id', userId)
+      .single();
+
+    const role = profile?.role;
+    setUserRole(role);
+    
+    if (role === 'admin' || role === 'super_admin') {
       setIsAuthenticated(true);
       fetchAllProfiles();
-      toast.success('Acesso administrativo autorizado');
     } else {
+      setIsAuthenticated(false);
       toast.error('Acesso restrito. Este painel é exclusivo para administradores.');
     }
   };
@@ -84,40 +118,39 @@ export default function AdminPanel() {
   const connectedSellers = profiles.filter(p => p.ml_access_token);
   const expiredTokens = profiles.filter(p => !p.ml_access_token && p.ml_user_id);
 
-  if (!isAuthenticated) {
+  if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-ml-yellow/10 to-ml-blue/10 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl text-ml-blue">Painel Administrativo</CardTitle>
-            <CardDescription>Acesso restrito para administradores</CardDescription>
+            <CardDescription>Faça login para acessar o painel</CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleAdminLogin} className="space-y-4">
-              <div>
-                <Label htmlFor="admin-email">E-mail Administrativo</Label>
-                <Input
-                  id="admin-email"
-                  type="email"
-                  value={adminEmail}
-                  onChange={(e) => setAdminEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="admin-password">Senha</Label>
-                <Input
-                  id="admin-password"
-                  type="password"
-                  value={adminPassword}
-                  onChange={(e) => setAdminPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <Button type="submit" className="w-full">
-                Acessar Painel
-              </Button>
-            </form>
+          <CardContent className="text-center">
+            <Button onClick={() => window.location.href = '/auth'} className="w-full">
+              Fazer Login
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-ml-yellow/10 to-ml-blue/10 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl text-ml-blue">Acesso Negado</CardTitle>
+            <CardDescription>Você não tem permissão para acessar este painel</CardDescription>
+          </CardHeader>
+          <CardContent className="text-center">
+            <p className="text-sm text-muted-foreground mb-4">
+              Este painel é restrito para administradores
+            </p>
+            <Button onClick={() => window.location.href = '/'} className="w-full">
+              Voltar ao Início
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -136,7 +169,7 @@ export default function AdminPanel() {
             <Button 
               variant="outline" 
               className="bg-white text-ml-blue hover:bg-gray-100"
-              onClick={() => setIsAuthenticated(false)}
+              onClick={() => supabase.auth.signOut()}
             >
               Sair
             </Button>
