@@ -25,9 +25,8 @@ serve(async (req) => {
       );
     }
 
-    // Obter a origem da requisição para construir a URL de redirect dinamicamente
-    const origin = req.headers.get('origin') || req.headers.get('referer')?.split('/').slice(0, 3).join('/');
-    const redirectUri = origin ? `${origin}/ml-callback` : 'https://pwkczhxdgivypgoxpbjz.supabase.co/ml-callback';
+    // Usar sempre o domínio Supabase para maior confiabilidade
+    const redirectUri = 'https://pwkczhxdgivypgoxpbjz.supabase.co/functions/v1/ml-callback';
 
     console.log('Client ID solicitado:', clientId.substring(0, 4) + '...');
     console.log('Redirect URI configurado:', redirectUri);
