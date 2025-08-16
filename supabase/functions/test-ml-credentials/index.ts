@@ -45,9 +45,9 @@ serve(async (req) => {
       siteId: testData.id
     });
 
-    // Obter configuração dinâmica de redirect
+    // Obter a origem da requisição para construir a URL de redirect dinamicamente
     const origin = req.headers.get('origin') || req.headers.get('referer')?.split('/').slice(0, 3).join('/');
-    const redirectUri = origin ? `${origin}/ml-callback` : 'https://pwkczhxdgivypgoxpbjz.supabase.co/ml-callback';
+    const redirectUri = origin ? `${origin}/ml-callback` : 'https://preview--mercadofacil-assistente.lovable.app/ml-callback';
 
     return new Response(
       JSON.stringify({ 
