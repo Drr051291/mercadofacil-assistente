@@ -25,12 +25,17 @@ serve(async (req) => {
       );
     }
 
+    // Obter a origem da requisição para construir a URL de redirect dinamicamente
+    const origin = req.headers.get('origin') || req.headers.get('referer')?.split('/').slice(0, 3).join('/');
+    const redirectUri = origin ? `${origin}/ml-callback` : 'https://pwkczhxdgivypgoxpbjz.supabase.co/ml-callback';
+
     console.log('Client ID solicitado:', clientId.substring(0, 4) + '...');
+    console.log('Redirect URI configurado:', redirectUri);
 
     return new Response(
       JSON.stringify({ 
         clientId,
-        redirectUri: 'https://fe2ff296-158a-4521-aaa1-638d34c90c87.lovableproject.com/ml-callback'
+        redirectUri
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
