@@ -5,3 +5,9 @@ verify_jwt = true
 
 [functions.ml-config]
 verify_jwt = false
+
+[functions.ml-callback]
+verify_jwt = false
+
+[functions.test-ml-credentials]
+verify_jwt = false
