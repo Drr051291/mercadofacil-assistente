@@ -15,14 +15,30 @@ serve(async (req) => {
     const clientId = Deno.env.get('ML_CLIENT_ID');
     const clientSecret = Deno.env.get('ML_CLIENT_SECRET');
     
+    // Log detalhado para debug
+    console.log('Debug secrets:', {
+      hasClientId: !!clientId,
+      hasClientSecret: !!clientSecret,
+      clientIdLength: clientId?.length || 0,
+      secretLength: clientSecret?.length || 0,
+      timestamp: new Date().toISOString()
+    });
+    
     if (!clientId || !clientSecret) {
-      console.error('Credenciais ML não configuradas');
+      console.error('Credenciais ML não configuradas', {
+        clientId: clientId ? 'presente' : 'ausente',
+        clientSecret: clientSecret ? 'presente' : 'ausente'
+      });
       return new Response(
         JSON.stringify({ 
           success: false, 
           error: 'Credenciais não configuradas',
-          hasClientId: !!clientId,
-          hasClientSecret: !!clientSecret
+          debug: {
+            hasClientId: !!clientId,
+            hasClientSecret: !!clientSecret,
+            clientIdLength: clientId?.length || 0,
+            secretLength: clientSecret?.length || 0
+          }
         }),
         { 
           status: 500,
